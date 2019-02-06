@@ -8,7 +8,7 @@ my-project/node_modules
 /coverage
 
 # twitConfiguration
-my-project/twitConfig.js
+my-project/.env
 
 
 # production

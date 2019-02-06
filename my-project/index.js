@@ -1,5 +1,5 @@
 const Twit = require('twit');
-const twitConfig = require('./twitConfig');
+const twitConfig = require('./config/twitConfig');
 
 let T = new Twit(twitConfig);
 
