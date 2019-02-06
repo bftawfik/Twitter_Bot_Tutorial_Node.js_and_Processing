@@ -23,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/bftawfik/Twitter_Bot_Tutorial_Node.js_and_Processing/issues"
   },
-  "homepage": "https://github.com/bftawfik/Twitter_Bot_Tutorial_Node.js_and_Processing#readme"
+  "homepage": "https://github.com/bftawfik/Twitter_Bot_Tutorial_Node.js_and_Processing#readme",
+  "dependencies": {
+    "twit": "^2.2.11"
+  }
 }
