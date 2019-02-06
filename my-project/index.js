@@ -1,0 +1,1 @@
+let twitConfig = require('./twitConfig');

@@ -1,0 +1,27 @@
+{
+  "name": "twitter_bot",
+  "version": "1.0.0",
+  "description": "My 1st Twiiter bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/bftawfik/Twitter_Bot_Tutorial_Node.js_and_Processing.git"
+  },
+  "keywords": [
+    "Twiiter",
+    "Js",
+    "Bot",
+    "Node",
+    "Twit"
+  ],
+  "author": "BFTawfik",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bftawfik/Twitter_Bot_Tutorial_Node.js_and_Processing/issues"
+  },
+  "homepage": "https://github.com/bftawfik/Twitter_Bot_Tutorial_Node.js_and_Processing#readme"
+}
