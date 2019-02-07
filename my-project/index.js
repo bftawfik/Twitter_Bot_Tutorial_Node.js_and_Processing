@@ -1,6 +1,13 @@
 const Twit = require('twit');
+const fetch = require('node-fetch');
+const parser = require('xml2json');
+
 const twitConfig = require('./config/twitConfig');
-const writeModule = require('./fileSystem/writeModule');
+const writeModule = require('./funcions/writeModule');
+
+const getArticle = require('./funcions/getArticle');
+
+
 let T = new Twit(twitConfig);
 
 // search for tweets using hashtag
@@ -51,11 +58,36 @@ const unfollowUser = user_id => {
 // searchForTweetsByHashtag('freeCodeCamp', 5);
 // searchForTweetByIdStr('1093111413248352256');
 // retweetByTweetIdStr('1093111413248352256');
-// unfollowUser('249699949');
+// followUser('249699949');
 // unfollowUser('249699949');
 
-var stream = T.stream('statuses/filter', {track: '#freeCodeCamp'})
+// var stream = T.stream('statuses/filter', {track: '#freeCodeCamp'})
+//
+// stream.on('tweet', function (tweet) {
+//   writeModule.writeJSON('fileSystem/tweet.json', JSON.stringify(tweet, null, 2));
+// });
 
-stream.on('tweet', function (tweet) {
-  writeModule.writeJSON('fileSystem/tweet.json', JSON.stringify(tweet, null, 2));
-});
+// var xml = "<foo attr=\"value\">bar</foo>";
+// console.log("input -> %s", xml)
+// var json = parser.toJson(xml);
+// console.log("to json -> %s", json);
+
+
+getArticle.findArticle('./db/db.json')
+.then(function(res){
+  let publicationsData = JSON.parse(res);
+  let publication = publicationsData.publicationsList[publicationsData.publicationsRoundNumber];
+  console.log(publication.name);
+  fetch('https://medium.com/feed/'+publication.name)
+  .then(res => res.text())
+  .then(body => {
+    let data_json = parser.toJson(body, {object: true});
+    let data = {
+      title: data_json.rss.channel.item[0].title,
+      link: data_json.rss.channel.item[0].link,
+      publication: publication
+    };
+    console.log(data);
+    return data;
+  });
+})
