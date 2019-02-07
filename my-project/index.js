@@ -1,6 +1,6 @@
 const Twit = require('twit');
 const twitConfig = require('./config/twitConfig');
-
+const writeModule = require('./fileSystem/writeModule');
 let T = new Twit(twitConfig);
 
 // search for tweets using hashtag
@@ -53,3 +53,9 @@ const unfollowUser = user_id => {
 // retweetByTweetIdStr('1093111413248352256');
 // unfollowUser('249699949');
 // unfollowUser('249699949');
+
+var stream = T.stream('statuses/filter', {track: '#freeCodeCamp'})
+
+stream.on('tweet', function (tweet) {
+  writeModule.writeJSON('fileSystem/tweet.json', JSON.stringify(tweet, null, 2));
+});
