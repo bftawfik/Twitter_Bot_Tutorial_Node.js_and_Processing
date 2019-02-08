@@ -2,10 +2,12 @@ const Twit = require('twit');
 const fetch = require('node-fetch');
 const parser = require('xml2json');
 
+
 const twitConfig = require('./config/twitConfig');
+const readModule = require('./funcions/readModule');
 const writeModule = require('./funcions/writeModule');
 
-const getArticle = require('./funcions/getArticle');
+const databasePath = './db/db0.json';
 
 
 let T = new Twit(twitConfig);
@@ -31,6 +33,13 @@ const searchForTweetByIdStr = id => {
   T.get('statuses/show', { 'id': id}, function(err, data, response) {
     err ? console.log('error') : console.log({ 'tweet': { 'id': data.id_str, 'text': data.text, owner: { 'id': data.user.id_str, 'name': data.user.name, 'screen_name': data.user.screen_name } } });
   });
+}
+
+const tweetMsg= msg => {
+  console.log(msg)
+  T.post('statuses/update', { status: msg }, function(err, data, response) {
+    err ? console.log('error') : console.log(data)
+  })
 }
 
 // retweet a tweet using tweet id_str
@@ -73,21 +82,52 @@ const unfollowUser = user_id => {
 // console.log("to json -> %s", json);
 
 
-getArticle.findArticle('./db/db.json')
-.then(function(res){
-  let publicationsData = JSON.parse(res);
-  let publication = publicationsData.publicationsList[publicationsData.publicationsRoundNumber];
-  console.log(publication.name);
-  fetch('https://medium.com/feed/'+publication.name)
+const laodDatabase = (path, callback, tweet=true) => {
+  console.log('laodDatabase');
+  readModule.readJSON(path)
+  .then(function(res){
+    let publicationsData = JSON.parse(res);
+    callback(publicationsData, saveDatabase, tweet)
+  })
+}
+
+
+const laodRssFeed = (publicationsData, callback, tweet=true) => {
+  // console.log(publicationsData);
+  let publicationName = publicationsData.publicationsList[publicationsData.publicationsRoundNumber].name;
+  fetch('https://medium.com/feed/'+publicationName)
   .then(res => res.text())
   .then(body => {
-    let data_json = parser.toJson(body, {object: true});
-    let data = {
-      title: data_json.rss.channel.item[0].title,
-      link: data_json.rss.channel.item[0].link,
-      publication: publication
-    };
-    console.log(data);
-    return data;
+    if(body.indexOf("<?xml") === 0){
+      let data_json = parser.toJson(body, {object: true});
+      let data = {
+        title: data_json.rss.channel.item[0].title,
+        tags: publicationsData.tags.join(" "),
+        link: data_json.rss.channel.item[0].link.slice(0, data_json.rss.channel.item[0].link.indexOf("?")),
+      };
+      console.log(data.title)
+      if(tweet){
+        tweetMsg(data.title+" "+data.tags+" "+data.link)
+      }
+      callback(publicationsData, data);
+      return;
+    }
+    callback(publicationsData);
   });
-})
+}
+
+const saveDatabase = (publicationsData, fetchData) => {
+  // console.log(fetchData);
+  if(fetchData){
+    if(publicationsData.publicationsList[publicationsData.publicationsRoundNumber].lastArticle !== fetchData.link){
+      publicationsData.publicationsList[publicationsData.publicationsRoundNumber].lastArticle = fetchData.link;
+    }
+  }
+  publicationsData.publicationsRoundNumber++;
+  publicationsData.publicationsRoundNumber = publicationsData.publicationsRoundNumber % publicationsData.publicationsList.length;
+  writeModule.writeJSON('./db/db0.json', JSON.stringify(publicationsData, null, 2));
+}
+
+//****************************************************************
+setInterval(laodDatabase, 10*1000, databasePath, laodRssFeed);
+// setInterval(laodDatabase, 24*60*60*1000, databasePath, laodRssFeed);

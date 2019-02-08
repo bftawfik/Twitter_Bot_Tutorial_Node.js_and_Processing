@@ -5,6 +5,6 @@ const readModule = require('./readModule');
 
 module.exports = {
   findArticle: (path) => {
-    return readModule.readJSON(path)
+    return
   }
 }
