@@ -4,8 +4,7 @@ const parser = require('xml2json');
 
 
 const twitConfig = require('./config/twitConfig');
-const readModule = require('./funcions/readModule');
-const writeModule = require('./funcions/writeModule');
+const dataAccessModules = require('./funcions/dataAccessModules');
 
 const databasePath = './db/db0.json';
 
@@ -36,9 +35,10 @@ const searchForTweetByIdStr = id => {
 }
 
 const tweetMsg= msg => {
-  console.log(msg)
+  console.log('tweetMsg');
   T.post('statuses/update', { status: msg }, function(err, data, response) {
-    err ? console.log('error') : console.log(data)
+    err ? console.log('error') : null;
+    //console.log(data)
   })
 }
 
@@ -64,36 +64,31 @@ const unfollowUser = user_id => {
   });
 }
 
-// searchForTweetsByHashtag('freeCodeCamp', 5);
-// searchForTweetByIdStr('1093111413248352256');
-// retweetByTweetIdStr('1093111413248352256');
-// followUser('249699949');
-// unfollowUser('249699949');
+
 
 // var stream = T.stream('statuses/filter', {track: '#freeCodeCamp'})
 //
 // stream.on('tweet', function (tweet) {
-//   writeModule.writeJSON('fileSystem/tweet.json', JSON.stringify(tweet, null, 2));
+//   dataAccessModules.writeJSON('fileSystem/tweet.json', JSON.stringify(tweet, null, 2));
 // });
 
-// var xml = "<foo attr=\"value\">bar</foo>";
-// console.log("input -> %s", xml)
-// var json = parser.toJson(xml);
-// console.log("to json -> %s", json);
+//**************************************************************************************************
+//**************************************************************************************************
+//**************************************************************************************************
 
-
+// load the json database from the database path
 const laodDatabase = (path, callback, tweet=true) => {
   console.log('laodDatabase');
-  readModule.readJSON(path)
+  dataAccessModules.readJSON(path)
   .then(function(res){
     let publicationsData = JSON.parse(res);
     callback(publicationsData, saveDatabase, tweet)
   })
 }
 
-
+// load RSS feed from Medium.com and tweet the 1st link
 const laodRssFeed = (publicationsData, callback, tweet=true) => {
-  // console.log(publicationsData);
+  console.log('laodRssFeed');
   let publicationName = publicationsData.publicationsList[publicationsData.publicationsRoundNumber].name;
   fetch('https://medium.com/feed/'+publicationName)
   .then(res => res.text())
@@ -105,7 +100,6 @@ const laodRssFeed = (publicationsData, callback, tweet=true) => {
         tags: publicationsData.tags.join(" "),
         link: data_json.rss.channel.item[0].link.slice(0, data_json.rss.channel.item[0].link.indexOf("?")),
       };
-      console.log(data.title)
       if(tweet){
         tweetMsg(data.title+" "+data.tags+" "+data.link)
       }
@@ -116,8 +110,9 @@ const laodRssFeed = (publicationsData, callback, tweet=true) => {
   });
 }
 
+// save to the json database from after changing the data
 const saveDatabase = (publicationsData, fetchData) => {
-  // console.log(fetchData);
+  console.log('saveDatabase');
   if(fetchData){
     if(publicationsData.publicationsList[publicationsData.publicationsRoundNumber].lastArticle !== fetchData.link){
       publicationsData.publicationsList[publicationsData.publicationsRoundNumber].lastArticle = fetchData.link;
@@ -125,9 +120,26 @@ const saveDatabase = (publicationsData, fetchData) => {
   }
   publicationsData.publicationsRoundNumber++;
   publicationsData.publicationsRoundNumber = publicationsData.publicationsRoundNumber % publicationsData.publicationsList.length;
-  writeModule.writeJSON('./db/db0.json', JSON.stringify(publicationsData, null, 2));
+  dataAccessModules.writeJSON('./db/db0.json', JSON.stringify(publicationsData, null, 2));
 }
 
-//****************************************************************
+//**************************************************************************************************
+//**************************************************************************************************
+//**************************************************************************************************
+
+// searchForTweetsByHashtag('freeCodeCamp', 5);
+// searchForTweetByIdStr('1093111413248352256');
+// retweetByTweetIdStr('1093111413248352256');
+// followUser('249699949');
+// unfollowUser('249699949');
+
+// laodDatabase(databasePath, laodRssFeed);
+// laodRssFeed(publicationsData, saveDatabase);
+// saveDatabase(publicationsData, fetchData);
+
+//**************************************************************************************************
+//**************************************************************************************************
+//**************************************************************************************************
+
 setInterval(laodDatabase, 10*1000, databasePath, laodRssFeed);
 // setInterval(laodDatabase, 24*60*60*1000, databasePath, laodRssFeed);

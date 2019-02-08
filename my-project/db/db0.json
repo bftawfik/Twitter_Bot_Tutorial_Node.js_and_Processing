@@ -2,47 +2,47 @@
   "publicationsList": [
     {
       "name": "DailyJS",
-      "lastArticle": ""
+      "lastArticle": "https://medium.com/dailyjs/what-is-actually-css-in-js-f2f529a2757"
     },
     {
       "name": "web-development-zone",
-      "lastArticle": ""
+      "lastArticle": "https://medium.com/web-development-zone/top-free-ebooks-for-web-designers-web-developers-f8c6a70465ad"
     },
     {
       "name": "react-native-training",
-      "lastArticle": ""
+      "lastArticle": "https://medium.com/react-native-training/lets-write-examples-with-package-by-feature-approach-on-react-native-7494b49e034c"
     },
     {
       "name": "the-node-js-collection",
-      "lastArticle": ""
+      "lastArticle": "https://medium.com/the-node-js-collection/the-node-js-update-week-4-25-january-2019-3e67be8cc10b"
     },
     {
       "name": "dev-channel",
-      "lastArticle": ""
+      "lastArticle": "https://medium.com/dev-channel/engaging-in-web-standards-the-compatible-with-most-web-developers-approach-eae5f624a5b7"
     },
     {
       "name": "webpack",
-      "lastArticle": ""
+      "lastArticle": "https://medium.com/webpack/we-are-changing-the-interface-of-webpack-cli-heres-why-2e8057f2eda1"
     },
     {
       "name": "front-end-weekly",
-      "lastArticle": ""
+      "lastArticle": "https://medium.com/front-end-weekly/how-to-add-some-fireworks-to-your-website-18b594b06cca"
     },
     {
       "name": "the-vue-point",
-      "lastArticle": ""
+      "lastArticle": "https://medium.com/the-vue-point/vue-2-6-released-66aa6c8e785e"
     },
     {
       "name": "coderbyte",
-      "lastArticle": ""
+      "lastArticle": "https://medium.com/coderbyte/effectively-recruiting-programmers-with-coderbyte-d2a7bfa79b7c"
     },
     {
       "name": "js-dojo",
-      "lastArticle": ""
+      "lastArticle": "https://medium.com/js-dojo/react-vs-vue-exact-todo-app-comparison-by-example-14cc56efc5e5"
     },
     {
       "name": "learning-new-stuff",
-      "lastArticle": ""
+      "lastArticle": "https://medium.com/learning-new-stuff/5-array-methods-all-javascript-beginners-should-know-48b5795d77f8"
     },
     {
       "name": "codingthesmartway-com-blog",
@@ -104,5 +104,5 @@
     "#html5",
     "#css"
   ],
-  "publicationsRoundNumber": 0
+  "publicationsRoundNumber": 11
 }
