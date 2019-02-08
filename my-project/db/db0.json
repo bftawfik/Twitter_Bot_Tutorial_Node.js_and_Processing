@@ -46,23 +46,23 @@
     },
     {
       "name": "codingthesmartway-com-blog",
-      "lastArticle": ""
+      "lastArticle": "https://medium.com/codingthesmartway-com-blog/gatsby-and-contentful-the-headless-cms-approach-5c7137145ace"
     },
     {
       "name": "javascript-in-plain-english",
-      "lastArticle": ""
+      "lastArticle": "https://medium.com/javascript-in-plain-english/build-angular-application-with-lint-unit-tests-chrome-headless-and-release-to-nginx-inside-bdc84ea9e5ab"
     },
     {
       "name": "vue-mastery",
-      "lastArticle": ""
+      "lastArticle": "https://medium.com/vue-mastery/7-problems-you-can-avoid-by-using-nuxt-js-for-your-next-vue-app-963afd5047d3"
     },
     {
       "name": "node-js-javascript",
-      "lastArticle": ""
+      "lastArticle": "https://medium.com/node-js-javascript/make-node-js-core-bigger-97ca7ef62b77"
     },
     {
       "name": "hackingui",
-      "lastArticle": ""
+      "lastArticle": "https://medium.com/hackingui/hui-weekly-roundup-179-the-evolution-of-design-with-culture-thinking-the-newsletter-revolution-722fea4e2d03"
     },
     {
       "name": "cool-code-pal",
@@ -104,5 +104,5 @@
     "#html5",
     "#css"
   ],
-  "publicationsRoundNumber": 11
+  "publicationsRoundNumber": 16
 }
