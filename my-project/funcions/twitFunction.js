@@ -1,4 +1,4 @@
-require('dotenv').config();
+// require('dotenv').config();
 
 let twitterFunction = {
   searchForTweetsByHashtag: (Twit, hashtag='freeCodeCamp', count=1) => {

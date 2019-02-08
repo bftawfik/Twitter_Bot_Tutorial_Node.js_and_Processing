@@ -1,4 +1,4 @@
-require('dotenv').config();
+// require('dotenv').config();
 
 const Twit = require('twit');
 const fetch = require('node-fetch');
