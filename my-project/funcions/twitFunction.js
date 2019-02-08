@@ -1,49 +1,53 @@
-module.exports = {
-  searchForTweetsByHashtag: (hashtag='freeCodeCamp', count=1) => {
-    console.log('searchForTweetsByHashtag');
+require('dotenv').config();
+
+let twitterFunction = {
+  searchForTweetsByHashtag: (Twit, hashtag='freeCodeCamp', count=1) => {
     hashtag = hashtag.indexOf('#') === 0 ? hashtag.slice(hashtag.indexOf('#')+1, hashtag.length) : hashtag;
-    T.get('search/tweets', { 'q': '#'+hashtag, 'count': count }, function(err, data, response) {
-      err ? console.log('error') : null;
-      // console.log('*********************************************');
-      // console.log(data.statuses);
-      // console.log('*********************************************');
-      // console.log(count, data.statuses.length);
-      // console.log(data.statuses.map(s => ({ 'tweet': { 'id': s.id_str, 'text': s.text, owner: { 'id': s.user.id_str, 'name': s.user.name, 'screen_name': s.user.screen_name } } })));
+    Twit.get('search/tweets', { 'q': '#'+hashtag, 'count': count }, function(err, data, response) {
+      err ? console.log('searchForTweetsByHashtag error') : null;
     });
   },
-  searchForTweetByIdStr: id => {
-    console.log('searchForTweetByIdStr');
-    T.get('statuses/show', { 'id': id}, function(err, data, response) {
-      err ? console.log('error') : null;
-      // console.log({ 'tweet': { 'id': data.id_str, 'text': data.text, owner: { 'id': data.user.id_str, 'name': data.user.name, 'screen_name': data.user.screen_name } } });
+  searchForTweetByIdStr: (Twit, id) => {
+    Twit.get('statuses/show', { 'id': id}, function(err, data, response) {
+      err ? console.log('searchForTweetByIdStr error') : null;
     });
   },
-  tweetMsg: msg => {
-    console.log('tweetMsg');
-    T.post('statuses/update', { status: msg }, function(err, data, response) {
-      err ? console.log('error') : null;
-      // console.log(data)
+  tweetMsg: (Twit, msg) => {
+    Twit.post('statuses/update', { status: msg }, function(err, data, response) {
+      err ? console.log('tweetMsg error') : null;
     })
   },
-  retweetByTweetIdStr: id => {
-    console.log('retweetByTweetIdStr');
-    T.post('statuses/retweet/:id', { 'id': id }, function (err, data, response) {
-      err ? console.log('error') : null;
-      // console.log(data);
+  retweetByTweetIdStr: (Twit, id) => {
+    Twit.post('statuses/retweet/:id', { 'id': id }, function (err, data, response) {
+      err ? console.log('retweetByTweetIdStr error') : null;
     });
   },
-  followUser: user_id => {
-    console.log('followUser');
-    T.post('friendships/create', { 'user_id': user_id, 'follow': false }, function(err, data, response) {
-      err ? console.log('error') : null;
-      // console.log(data);
+  followUser: (Twit, user_id) => {
+    Twit.post('friendships/create', { 'user_id': user_id, 'follow': false }, function(err, data, response) {
+      err ? console.log('followUser error') : null;
     });
   },
-  unfollowUser: user_id => {
-    console.log('unfollowUser');
-    T.post('friendships/destroy', { 'user_id': user_id}, function(err, data, response) {
-      err ? console.log('error') : null;
-      // console.log(data);
+  unfollowUser: (Twit, user_id) => {
+    Twit.post('friendships/destroy', { 'user_id': user_id}, function(err, data, response) {
+      err ? console.log('unfollowUser error') : null;
     });
   },
+  followHashtagsAndMyMention: (Twit, streamHashtags) => {
+    let stream = Twit.stream('statuses/filter', {track: [...streamHashtags, process.env.SCREEN_NAME]});
+    stream.on('tweet', function (tweet) {
+      if(!tweet.retweeted_status){
+        let foundMe = [];
+        if(tweet.entities.user_mentions.length > 0){
+          foundMe = tweet.entities.user_mentions.filter(user => user.id_str === process.env.ID_STR);
+        }
+        if(foundMe.length > 0){
+          twitterFunction.tweetMsg(Twit, 'Many thanks @' + tweet.user.screen_name + ' for mentioning me, but i\'m useless without my creator. You may want to contact him @' + process.env.MAKER_SCREEN_NAME+'!');
+        }else if(tweet.user.id_str !== process.env.ID_STR){
+          twitterFunction.retweetByTweetIdStr(Twit, tweet.id_str);
+          twitterFunction.followUser(Twit, tweet.user.id_str);
+        }
+      }
+    });
+  }
 }
+module.exports = twitterFunction;
