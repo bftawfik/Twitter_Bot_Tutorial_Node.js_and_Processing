@@ -26,7 +26,7 @@
   "homepage": "https://github.com/bftawfik/Twitter_Bot_Tutorial_Node.js_and_Processing#readme",
   "dependencies": {
     "bluebird": "^3.5.3",
-    "node-fetch": "^2.3.0",
+    "node-fetch": "^3.1.1",
     "twit": "^2.2.11",
     "xml2json": "^0.11.2"
   }
